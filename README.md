@@ -1,7 +1,8 @@
-### sql queries
+# sql queries
 
-###### creating database and tables
-- creating database
+### creating database and tables
+
+CREATING DATABASE 
 ``` sql
  SHOW DATABASES;
  CREATE DATABASE <NAME>;
