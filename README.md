@@ -296,3 +296,131 @@ WHERE pages = (SELECT Min(pages)  FROM books);
 SELECT author_fname, author_lname, Min(released_year) FROM   books 
 GROUP  BY author_lname, author_fname;
 ```
+
+
+SUM :
+```sql
+SELECT author_fname, author_lname, Sum(pages) FROM books 
+GROUP BY author_lname,author_fname;
+```
+
+
+AVG:
+```sql
+SELECT AVG(stock_quantity) FROM books GROUP BY released_year;
+```
+
+### DATA TYPES :
+
+CHAR - HAS A FIXED LENGTH 
+(if we give greater length then it's turncated)
+
+VARCHAR - VARIABLE LENGTH
+
+DECIMAL :
+```SQL
+CREATE TABLE items(price DECIMAL(5,2));
+/* where the 5 is the total number of digits and 2 is digit after decimal ,if we give a
+digit greater than 5 ex:- 3542452345 then it store 999.99 in the database as it is the highest*/
+
+/* decimal are fixed point type and calculation are exact*/
+
+```
+
+FLOAT AND DOUBLE :
+```SQL
+/*float and double are floating point type and calculations are approximate
+store large number with less size precision 7 digits
+double is 15 digits precision
+*/
+CREATE TABLE thingies (price FLOAT);
+INSERT INTO thingies(price) VALUES (88.45);
+```
+DATE AND TIME :
+```sql
+CREATE TABLE people (name VARCHAR(100), birthdate DATE, birthtime TIME, birthdt DATETIME);
+ 
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Padma', '1983-11-11', '10:07:35', '1983-11-11 10:07:35');
+
+SELECT CONCAT(MONTHNAME(birthdate), ' ', DAY(birthdate), ' ', YEAR(birthdate)) FROM people;
+
+
+SELECT DATE_FORMAT(birthdt, 'Was born on a %W') FROM people;
+ 
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y') FROM people;
+ 
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') FROM people;
+
+/* doing math in date time*/
+SELECT * FROM people;
+ 
+SELECT DATEDIFF(NOW(), birthdate) FROM people;
+ 
+SELECT name, birthdate, DATEDIFF(NOW(), birthdate) FROM people;
+ 
+SELECT birthdt FROM people;
+ 
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 1 MONTH) FROM people;
+ 
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 10 SECOND) FROM people;
+ 
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 3 QUARTER) FROM people;
+ 
+SELECT birthdt, birthdt + INTERVAL 1 MONTH FROM people;
+ 
+SELECT birthdt, birthdt - INTERVAL 5 MONTH FROM people;
+ 
+SELECT birthdt, birthdt + INTERVAL 15 MONTH + INTERVAL 10 HOUR FROM people;
+```
+### LOGICAL OPERATORS :
+```SQL
+/* NOT EQUAL TO*/
+SELECT title FROM books WHERE released_year != 2017;
+
+/* GREATER THAN EQUAL TO*/
+SELECT title, released_year FROM books 
+WHERE released_year >= 2000 ORDER BY released_year;
+
+/* AND */
+SELECT  
+    title, author_lname, released_year FROM books
+WHERE author_lname='Eggers' 
+    AND released_year > 2010;
+
+
+/* OR */
+SELECT 
+    title, 
+    author_lname, 
+    released_year 
+FROM books
+WHERE author_lname='Eggers' || released_year > 2010;
+
+
+/* IN AND NOT IN */
+SELECT 
+    title, 
+    author_lname 
+FROM books
+WHERE author_lname='Carver' OR
+      author_lname='Lahiri' OR
+      author_lname='Smith';
+
+/* CASE STATEMENT */
+SELECT tile,released_year,
+CASE
+  WHEN released_year >= 2000 THEN 'Modern Lit'
+  ELSE '20th Century Lit'
+END AS GENRE(this is just an alias)
+FROM books;
+
+/* CASE STATEMENT */
+SELECT title, stock_quantity,
+    CASE 
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 51 AND 100 THEN '**'
+        ELSE '***'
+    END AS STOCK
+FROM books;
+```
